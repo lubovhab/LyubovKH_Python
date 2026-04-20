@@ -51,12 +51,3 @@ class StringUtils:
         if self.contains(string, symbol):
             string = string.replace(symbol, "")
         return string
-    
-string_utils = StringUtils()
-print(string_utils.delete_symbol('test', 't'))
-print(string_utils.delete_symbol('test', 'e'))
-print(string_utils.delete_symbol('', 't'))
-print(string_utils.delete_symbol('  ', 't'))
-print(string_utils.delete_symbol('test', ''))
-print(string_utils.delete_symbol('test', '1'))
-print(string_utils.delete_symbol('test', 'test[1]'))

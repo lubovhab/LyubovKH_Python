@@ -42,18 +42,30 @@ def test_negative_capitalize_list():
         string_utils.capitalize([1, 2])
 
 
-@pytest.mark.positive
-@pytest.mark.parametrize('string', [
-    (' Hellow'), (' _hellow world!'), (' 1!@'), ('False'), ('[1, 2]')])
-def test_positive_trim(string):
+@pytest.mark.negative
+def test_negative_capitalize_none():
     string_utils = StringUtils()
-    res = string_utils.trim(string)
-    assert res
+    with pytest.raises(AttributeError):
+        string_utils.capitalize(None)
+
+
+@pytest.mark.positive
+@pytest.mark.parametrize('string, expected', [
+    (' Hellow', 'Hellow'),
+    (' _hellow world!', '_hellow world!'),
+    (' 1!@', '1!@'),
+    ('False', 'False'),
+    ('[1, 2]', '[1, 2]')])
+def test_positive_trim(string, expected):
+    assert string_utils.trim(string) == expected
 
 
 @pytest.mark.negative
-@pytest.mark.parametrize('input_str, expected', [('   ', ''), ('', '')])
-def test_negative_trim_None(input_str, expected):
+@pytest.mark.parametrize('input_str, expected',[
+    ('   ', ''),
+    ('', '')
+    ])
+def test_negative_trim_empty(input_str, expected):
     assert string_utils.trim(input_str) == expected
 
 
@@ -79,8 +91,14 @@ def test_positive_contains(string, symbol, expected):
 @pytest.mark.negative
 @pytest.mark.parametrize('input_str, input_symbol, expected', [
     ('test', 'testic', False), ('test', '', True)])
-def test_negative_contains_None(input_str, input_symbol, expected):
+def test_negative_contains_specify(input_str, input_symbol, expected):
     assert string_utils.contains(input_str, input_symbol) == expected
+
+
+@pytest.mark.negative
+def test_negative_contains_none():
+    with pytest.raises(AttributeError):
+        string_utils.contains(None, None)
 
 
 @pytest.mark.positive
@@ -101,3 +119,11 @@ def test_delete_symbol_empty_string():
     string_utils = StringUtils()
     res = string_utils.delete_symbol('', 't')
     assert res == ''
+
+
+@pytest.mark.negative
+@pytest.mark.xfail(strict=False, reason="если вместо символа отправить пустоту?" )
+def test_negative_delete_symbol_none():
+    string_utils = StringUtils()
+    with pytest.raises(TypeError):
+        string_utils.delete_symbol('test', None)
