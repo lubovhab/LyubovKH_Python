@@ -127,3 +127,4 @@ def test_negative_delete_symbol_none():
     string_utils = StringUtils()
     with pytest.raises(TypeError):
         string_utils.delete_symbol('test', None)
+_
