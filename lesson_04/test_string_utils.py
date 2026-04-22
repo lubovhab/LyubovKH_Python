@@ -21,7 +21,7 @@ def test_positive_capitalize(input_str, expected):
 
 
 @pytest.mark.positive
-def test_positive_capitalize_bool():
+def test_positive_capitalize_empty_string():
     string_utils = StringUtils()
     res = string_utils.capitalize('')
     assert res == ''
@@ -54,14 +54,15 @@ def test_negative_capitalize_none():
     (' Hellow', 'Hellow'),
     (' _hellow world!', '_hellow world!'),
     (' 1!@', '1!@'),
-    ('False', 'False'),
-    ('[1, 2]', '[1, 2]')])
+    (' False ', 'False '),
+    ('    [1, 2]', '[1, 2]')
+    ])
 def test_positive_trim(string, expected):
     assert string_utils.trim(string) == expected
 
 
 @pytest.mark.negative
-@pytest.mark.parametrize('input_str, expected',[
+@pytest.mark.parametrize('input_str, expected', [
     ('   ', ''),
     ('', '')
     ])
@@ -82,7 +83,8 @@ def test_negative_trim_none():
     ('!@_', '_', True),
     ('test', 'test'[0], True),
     ('test', 'test'[-1], True),
-    ('abc', 'd', False)
+    ('abc', 'd', False),
+    ('  ', 't', False)
     ])
 def test_positive_contains(string, symbol, expected):
     assert string_utils.contains(string, symbol) == expected
@@ -97,8 +99,23 @@ def test_negative_contains_specify(input_str, input_symbol, expected):
 
 @pytest.mark.negative
 def test_negative_contains_none():
+    string_utils = StringUtils()
     with pytest.raises(AttributeError):
         string_utils.contains(None, None)
+
+
+@pytest.mark.negative
+def test_negative_contains_none_string():
+    string_utils = StringUtils()
+    with pytest.raises(AttributeError):
+        string_utils.contains(None, 'w')
+
+
+@pytest.mark.negative
+def test_negative_contains_none_simbol():
+    string_utils = StringUtils()
+    with pytest.raises(TypeError):
+        string_utils.contains('hellow', None)
 
 
 @pytest.mark.positive
@@ -122,9 +139,16 @@ def test_delete_symbol_empty_string():
 
 
 @pytest.mark.negative
-@pytest.mark.xfail(strict=False, reason="если вместо символа отправить пустоту?" )
+@pytest.mark.xfail(strict=False, reason="если вместо символа отправить пустоту?")
 def test_negative_delete_symbol_none():
     string_utils = StringUtils()
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError, match="index() argument 1 must be str, not None"):
         string_utils.delete_symbol('test', None)
-_
+
+
+@pytest.mark.negative
+@pytest.mark.xfail(strict=False, reason="если вместо строки отправить пустоту?")
+def test_negative_delete_str_none():
+    string_utils = StringUtils()
+    with pytest.raises(AttributeError):
+        string_utils.delete_symbol('test', None)
